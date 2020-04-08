@@ -3,16 +3,19 @@ import Headers from './components/Headers';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Auth from './components/Auth';
+import MsalHandler from './MsalHandler';
 
 export default function App() {
+  const msal = MsalHandler.getInstance();
+  var user = msal.getUserData();
   return (
     <Router>
       <div className="nav-container">
         <nav>
           <div className="left-menu">
             <Link to="/">Home</Link>
-            <Link to="/auth">Login</Link>
-            <Link to="/headers">Headers</Link>
+            <Link to="/auth">{user.accountAvailable ? "Claims for " + user.displayName : "Login"}</Link>
+            <Link to="/headers">API + Headers</Link>
           </div>
           <Link to="/" className="logo">ok</Link>
         </nav>
@@ -35,5 +38,11 @@ export default function App() {
   );
 }
 function Home() {
-  return <h2>Home</h2>
+  return (
+    <div>
+      <h1>Home</h1>
+      <p>A simple example using msaljs, loginRedirect and state.</p>
+      <p>Code at <a href="https://github.com/jpda/msaljs-axios-intercept">https://github.com/jpda/msaljs-axios-intercept</a></p>
+      </div>
+  )
 }

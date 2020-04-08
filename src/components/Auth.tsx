@@ -17,7 +17,7 @@ export default class Auth extends React.Component {
 
     constructor(props: any) {
         super(props);
-        this.msalHandler = MsalHandler.getInstance();
+        this.msalHandler = MsalHandler.getInstance(); // note this returns the previously instantiated MsalHandler
         this.handleClick = this.handleClick.bind(this);
         this.accountAvailable = false;
     }
@@ -48,6 +48,7 @@ export default class Auth extends React.Component {
         if (this.accountAvailable) {
             return (
                 <div>
+                    <h1>User claims</h1>
                     <table>
                         <thead>
                             <tr>
@@ -56,7 +57,7 @@ export default class Auth extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.claims.map((x, i) => <tr key={i}><td>{x.key}</td><td>{x.value}</td></tr>)}
+                            {this.state.claims.map((x, i) => <tr key={i}><td>{x.key}</td><td>{x.value.length > 75 ? x.value.substring(0, 75) + ".../snip" : x.value}</td></tr>)}
                         </tbody>
                     </table>
                 </div>

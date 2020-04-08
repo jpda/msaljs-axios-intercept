@@ -5,9 +5,19 @@ interface IRequestConfiguration {
     state?: string;
 }
 
+class UserInfo {
+    accountAvailable: boolean;
+    displayName: string;
+    constructor() {
+        this.displayName = "";
+        this.accountAvailable = false;
+    }
+}
+
 export default class MsalHandler {
     msalObj: UserAgentApplication;
     redirect: boolean;
+    useStackLogging: boolean;
 
     static instance: MsalHandler;
     static createInstance() {
@@ -16,7 +26,7 @@ export default class MsalHandler {
     }
 
     static getInstance() {
-        if(!this.instance){
+        if (!this.instance) {
             this.instance = this.createInstance();
         }
         return this.instance;
@@ -28,7 +38,8 @@ export default class MsalHandler {
 
     constructor() {
         this.redirect = true;
-        console.warn("MsalHandler::ctor: starting");
+        this.useStackLogging = false;
+        this.track("ctor: starting");
         const a = new UserAgentApplication({
             auth: {
                 clientId: "31c0ca04-16fb-49b6-83a2-e8c8487ea4fd",
@@ -41,25 +52,33 @@ export default class MsalHandler {
             }
         });
 
-        console.warn("MsalHandler::ctor: setting redirect callbacks");
-        a.handleRedirectCallback(t => this.processLogin, e => { console.error(e); });
+        this.track("ctor: setting redirect callbacks");
+        a.handleRedirectCallback((error, response) => {
+            this.track("redirectCallback");
+            if (response) {
+                this.processLogin(response);
+            }
+            if (error) {
+                console.error(error);
+            }
+        });
         this.msalObj = a;
     }
 
     async login(redirect?: boolean, state?: string, scopes?: string[]) {
-        console.warn("MsalHandler::login: entering login; scopes: " + scopes + ", state: " + state + ", redirect: " + redirect);
+        this.track("entering login; scopes: " + scopes + ", state: " + state + ", redirect: " + redirect);
         if (state) {
-            console.warn("MsalHandler::login: Setting state to: " + state);
+            this.track("Setting state to: " + state);
             this.requestConfiguration.state = state;
         }
         if (redirect || this.redirect) {
-            console.warn("MsalHandler::login: redirecting to login with parameters: " + JSON.stringify(this.requestConfiguration));
+            this.track("redirecting to login with parameters: " + JSON.stringify(this.requestConfiguration));
             this.msalObj.loginRedirect(this.requestConfiguration);
         } else {
             try {
-                console.warn("MsalHandler::login: logging in with popup, config: " + JSON.stringify(this.requestConfiguration));
+                this.track("logging in with popup, config: " + JSON.stringify(this.requestConfiguration));
                 var response = await this.msalObj.loginPopup(this.requestConfiguration);
-                console.warn("MsalHandler::login: got something: " + JSON.stringify(response));
+                this.track("MsalHandler::login: got something: " + JSON.stringify(response));
                 this.processLogin(response);
             } catch (e) {
                 console.error(e);
@@ -67,17 +86,21 @@ export default class MsalHandler {
         }
     }
 
-    async acquireAccessToken(redirect?: boolean, state?: string, scopes?: string[]): Promise<String | null> {
+    async acquireAccessToken(state?: string, redirect?: boolean, scopes?: string[]): Promise<String | null> {
         if (scopes) {
             this.requestConfiguration.scopes = scopes;
         }
+        if (state) {
+            this.track("state: " + state);
+            this.requestConfiguration.state = state;
+        }
         try {
-            console.warn("MsalHandler::acquireAccessToken: access token silent: " + JSON.stringify(this.requestConfiguration));
+            this.track("access token silent: " + JSON.stringify(this.requestConfiguration));
             var token = await this.msalObj.acquireTokenSilent(this.requestConfiguration);
             return token.accessToken;
         } catch (e) {
             if (e instanceof AuthError) {
-                console.error("MsalHandler::acquireAccessToken: error: " + JSON.stringify(e));
+                console.error("acquireAccessToken: error: " + JSON.stringify(e));
                 if (e.errorCode === "user_login_error" || e.errorCode === "consent_required" || e.errorCode === "interaction_required") { // todo: check for other error codes
                     this.login(redirect, state, this.requestConfiguration.scopes);
                 }
@@ -87,13 +110,41 @@ export default class MsalHandler {
         return null;
     }
 
-    async getUserData() {
-
+    getUserData(): UserInfo {
+        var account = this.msalObj.getAccount();
+        var u = new UserInfo();
+        if (account) {
+            u.accountAvailable = true;
+            u.displayName = account.name;
+        }
+        return u;
     }
 
-    processLogin(t: AuthResponse) {
-        console.log("MsalHandler::processLogin: id_token received: " + t.idToken);
-        console.log("MsalHandler::processLogin:access_token received: " + t.accessToken);
-        console.log("MsalHandler::processLogin: state received: " + t.accountState);
+    processLogin(response: AuthResponse | undefined) {
+        this.track("processLogin");
+        if (!response) return;
+        this.track("id_token received: " + response.idToken);
+        this.track("access_token received: " + response.accessToken);
+        this.track("state received: " + response.accountState);
+
+        if (response.accountState) { // we had a redirect from another place in the app before the authentication request
+            this.track("got a " + response.accountState);
+            window.location.pathname = response.accountState;
+        }
+    }
+
+    private track(message: string) {
+        // lol: this is ridiculous - make sure you turn this off with this.useStackLogging = false
+        var msg = "MsalHandler::" + message;
+        if (this.useStackLogging) {
+            var e = new Error("ok");
+            var stack = e.stack?.split("\n")[2].trim();
+            var start = stack?.indexOf("(");
+            var prefix = msg?.substring(3, start).trim();
+            console.debug(prefix + message);
+        }
+        else {
+            console.log(msg);
+        }
     }
 }
