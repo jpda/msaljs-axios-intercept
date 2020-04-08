@@ -41,7 +41,7 @@ function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <p>A simple example using msaljs, loginRedirect and state.</p>
+      <p>A simple example using msaljs, loginRedirect and state. Use <a href="/auth">Login</a> to login or view your id_token claims. Use <a href="/headers">API + Headers</a> to make an authenticated API call and echo back the headers received by the server.</p>
       <p>Code at <a href="https://github.com/jpda/msaljs-axios-intercept">https://github.com/jpda/msaljs-axios-intercept</a></p>
       </div>
   )
