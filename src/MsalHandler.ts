@@ -9,12 +9,26 @@ export default class MsalHandler {
     msalObj: UserAgentApplication;
     redirect: boolean;
 
+    static instance: MsalHandler;
+    static createInstance() {
+        var a = new MsalHandler();
+        return a;
+    }
+
+    static getInstance() {
+        if(!this.instance){
+            this.instance = this.createInstance();
+        }
+        return this.instance;
+    }
+
     private requestConfiguration: IRequestConfiguration = {
         scopes: ["api://msaljs.jpda.app/power", "api://msaljs.jpda.app/wake"],
     };
 
     constructor() {
         this.redirect = true;
+        console.warn("MsalHandler::ctor: starting");
         const a = new UserAgentApplication({
             auth: {
                 clientId: "31c0ca04-16fb-49b6-83a2-e8c8487ea4fd",
@@ -27,24 +41,25 @@ export default class MsalHandler {
             }
         });
 
+        console.warn("MsalHandler::ctor: setting redirect callbacks");
         a.handleRedirectCallback(t => this.processLogin, e => { console.error(e); });
         this.msalObj = a;
     }
 
     async login(redirect?: boolean, state?: string, scopes?: string[]) {
-        console.warn("entering login; scopes: " + scopes + ", state: " + state + ", redirect: " + redirect);
+        console.warn("MsalHandler::login: entering login; scopes: " + scopes + ", state: " + state + ", redirect: " + redirect);
         if (state) {
-            console.warn("Setting state to: " + state);
+            console.warn("MsalHandler::login: Setting state to: " + state);
             this.requestConfiguration.state = state;
         }
         if (redirect || this.redirect) {
-            console.warn("redirecting to login with parameters: " + JSON.stringify(this.requestConfiguration));
+            console.warn("MsalHandler::login: redirecting to login with parameters: " + JSON.stringify(this.requestConfiguration));
             this.msalObj.loginRedirect(this.requestConfiguration);
         } else {
             try {
-                console.warn("logging in with popup, config: " + JSON.stringify(this.requestConfiguration));
+                console.warn("MsalHandler::login: logging in with popup, config: " + JSON.stringify(this.requestConfiguration));
                 var response = await this.msalObj.loginPopup(this.requestConfiguration);
-                console.warn("got something: " + JSON.stringify(response));
+                console.warn("MsalHandler::login: got something: " + JSON.stringify(response));
                 this.processLogin(response);
             } catch (e) {
                 console.error(e);
@@ -57,12 +72,12 @@ export default class MsalHandler {
             this.requestConfiguration.scopes = scopes;
         }
         try {
-            console.warn("access token silent: " + JSON.stringify(this.requestConfiguration));
+            console.warn("MsalHandler::acquireAccessToken: access token silent: " + JSON.stringify(this.requestConfiguration));
             var token = await this.msalObj.acquireTokenSilent(this.requestConfiguration);
             return token.accessToken;
         } catch (e) {
             if (e instanceof AuthError) {
-                console.error(JSON.stringify(e));
+                console.error("MsalHandler::acquireAccessToken: error: " + JSON.stringify(e));
                 if (e.errorCode === "user_login_error" || e.errorCode === "consent_required" || e.errorCode === "interaction_required") { // todo: check for other error codes
                     this.login(redirect, state, this.requestConfiguration.scopes);
                 }
@@ -72,10 +87,13 @@ export default class MsalHandler {
         return null;
     }
 
-    private processLogin(t: AuthResponse) {
-        console.warn("entering MsalHandler::login");
-        console.log("id_token received: " + t.idToken);
-        console.log("access_token received: " + t.accessToken);
-        console.log("state received: " + t.accountState);
+    async getUserData() {
+
+    }
+
+    processLogin(t: AuthResponse) {
+        console.log("MsalHandler::processLogin: id_token received: " + t.idToken);
+        console.log("MsalHandler::processLogin:access_token received: " + t.accessToken);
+        console.log("MsalHandler::processLogin: state received: " + t.accountState);
     }
 }

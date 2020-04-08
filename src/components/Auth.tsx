@@ -17,7 +17,7 @@ export default class Auth extends React.Component {
 
     constructor(props: any) {
         super(props);
-        this.msalHandler = new MsalHandler();
+        this.msalHandler = MsalHandler.getInstance();
         this.handleClick = this.handleClick.bind(this);
         this.accountAvailable = false;
     }
@@ -73,6 +73,6 @@ export default class Auth extends React.Component {
     async handleClick(e: any) {
         e.preventDefault();
         console.log("clicked");
-        await this.msalHandler.login(true);
+        await this.msalHandler.login();
     }
 }

@@ -5,7 +5,7 @@ const ax = axios.create({
     baseURL: `http://jpda.ngrok.io/api/`,
 });
 
-const msalHandler = new MsalHandler();
+const msalHandler = MsalHandler.getInstance();
 
 ax.interceptors.request.use(
     async request => {
