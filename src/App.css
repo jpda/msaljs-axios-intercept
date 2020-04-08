@@ -36,3 +36,85 @@
     transform: rotate(360deg);
   }
 }
+
+table {
+  text-align: left;
+  border: 1px solid black;
+}
+
+table > thead {
+  font-weight: bold;
+}
+
+/* i wanted something simple but wasted time on this https://modern-css.com/responsive-navbar-with-css-grid.html */
+
+.nav-container {
+  width: 100%;
+  background: #333;
+}
+
+nav {
+  max-width: 1720px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.left-menu {
+  grid-column: 2;
+}
+
+.logo {
+  grid-column: 1 1;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.left-menu a {
+  padding: 10px 0;
+  margin-left: 15px;
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.left-menu a:first-child {
+  margin-left: 0;
+}
+
+.logo {
+  font-size: 40px;
+  padding: 1rem;
+  margin:0 auto;
+}
+
+
+.left-menu {
+  grid-column: 1;
+  align-self: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: 'Segoe UI', sans-serif;
+  
+  transition: .3s all ease-in-out;
+}
+
+nav a:hover {
+  opacity: .7;
+}
+
+.container {
+  max-width:1720px;
+  margin:0 auto;
+  padding: 10px;
+}
