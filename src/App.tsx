@@ -9,7 +9,7 @@ export default function App() {
   const msal = MsalHandler.getInstance();
   var user = msal.getUserData();
   return (
-    <Router basename="/msal-axios-intercept">
+    <Router basename="/msaljs-axios-intercept">
       <div className="nav-container">
         <nav>
           <div className="left-menu">
