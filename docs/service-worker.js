@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/msal-axios-intercept/precache-manifest.30f6e4069ecc175b62c9746942d0fbdf.js"
+  "/msal-axios-intercept/precache-manifest.797d2515e532a8d5fb2e15c3bf6c1486.js"
 );
 
 self.addEventListener('message', (event) => {

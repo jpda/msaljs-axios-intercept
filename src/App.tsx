@@ -3,13 +3,13 @@ import Headers from './components/Headers';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Auth from './components/Auth';
-import MsalHandler from './MsalHandler';
+import MsalHandler from './msal/MsalHandler';
 
 export default function App() {
   const msal = MsalHandler.getInstance();
   var user = msal.getUserData();
   return (
-    <Router>
+    <Router basename="/msal-axios-intercept">
       <div className="nav-container">
         <nav>
           <div className="left-menu">

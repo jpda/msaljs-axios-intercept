@@ -1,8 +1,8 @@
 import axios from 'axios';
-import MsalHandler from './MsalHandler';
+import MsalHandler from './msal/MsalHandler';
 
 const ax = axios.create({
-    baseURL: `http://jpda.ngrok.io/api/`, // just an echo api - returns headers -- will move to public API
+    baseURL: `https://saywhat.azurewebsites.net/api/`, // just an echo api - returns headers and query
 });
 
 const msalHandler = MsalHandler.getInstance();

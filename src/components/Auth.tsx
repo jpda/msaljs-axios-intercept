@@ -1,5 +1,5 @@
 import React from 'react';
-import MsalHandler from '../MsalHandler';
+import MsalHandler from '../msal/MsalHandler';
 
 export class Claim {
     key: string;
