@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/msal-axios-intercept/static/css/main.3a940242.chunk.css",
+    "main.js": "/msal-axios-intercept/static/js/main.8c758358.chunk.js",
+    "main.js.map": "/msal-axios-intercept/static/js/main.8c758358.chunk.js.map",
+    "runtime-main.js": "/msal-axios-intercept/static/js/runtime-main.1e45943e.js",
+    "runtime-main.js.map": "/msal-axios-intercept/static/js/runtime-main.1e45943e.js.map",
+    "static/js/2.b9c7f11c.chunk.js": "/msal-axios-intercept/static/js/2.b9c7f11c.chunk.js",
+    "static/js/2.b9c7f11c.chunk.js.map": "/msal-axios-intercept/static/js/2.b9c7f11c.chunk.js.map",
+    "index.html": "/msal-axios-intercept/index.html",
+    "precache-manifest.797d2515e532a8d5fb2e15c3bf6c1486.js": "/msal-axios-intercept/precache-manifest.797d2515e532a8d5fb2e15c3bf6c1486.js",
+    "service-worker.js": "/msal-axios-intercept/service-worker.js",
+    "static/css/main.3a940242.chunk.css.map": "/msal-axios-intercept/static/css/main.3a940242.chunk.css.map",
+    "static/js/2.b9c7f11c.chunk.js.LICENSE.txt": "/msal-axios-intercept/static/js/2.b9c7f11c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1e45943e.js",
+    "static/js/2.b9c7f11c.chunk.js",
+    "static/css/main.3a940242.chunk.css",
+    "static/js/main.8c758358.chunk.js"
+  ]
+}
