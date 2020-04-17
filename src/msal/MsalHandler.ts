@@ -57,7 +57,7 @@ export default class MsalHandler {
         this.track("entering login; scopes: " + scopes + ", state: " + state + ", redirect: " + redirect);
         if (state) {
             this.track("Setting state to: " + state);
-            this.requestConfiguration.state = JSON.stringify({appState: true, state});
+            this.requestConfiguration.state = JSON.stringify({ appState: true, state });
         }
         if (redirect || this.redirect) {
             this.track("redirecting to login with parameters: " + JSON.stringify(this.requestConfiguration));
@@ -80,7 +80,7 @@ export default class MsalHandler {
         }
         if (state) {
             this.track("state: " + state);
-            this.requestConfiguration.state = JSON.stringify({appState: true, state});
+            this.requestConfiguration.state = JSON.stringify({ appState: true, state });
         }
         try {
             this.track("access token silent: " + JSON.stringify(this.requestConfiguration));
@@ -115,11 +115,11 @@ export default class MsalHandler {
         this.track("access_token received: " + response.accessToken);
         this.track("state received: " + response.accountState);
 
-        if (response.accountState) { // we had a redirect from another place in the app before the authentication request
+        if (response.accountState) {
             this.track("got a " + response.accountState);
             try {
                 var state = JSON.parse(response.accountState);
-                if(state.appState){
+                if (state.appState) { // we had a redirect from another place in the app before the authentication request
                     this.track("got state, and it's ours: " + state.state);
                     window.location.pathname = state.state;
                 }
