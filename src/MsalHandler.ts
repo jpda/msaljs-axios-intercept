@@ -19,13 +19,14 @@ export default class MsalHandler {
     redirect: boolean;
     useStackLogging: boolean;
 
+    // for handling a single instance of the handler, use getInstance() elsewhere
     static instance: MsalHandler;
-    static createInstance() {
+    private static createInstance() {
         var a = new MsalHandler();
         return a;
     }
 
-    static getInstance() {
+    public static getInstance() {
         if (!this.instance) {
             this.instance = this.createInstance();
         }
@@ -36,7 +37,8 @@ export default class MsalHandler {
         scopes: ["api://msaljs.jpda.app/power", "api://msaljs.jpda.app/wake"],
     };
 
-    constructor() {
+    // we want this private to prevent any external callers from directly instantiating, instead rely on getInstance()
+    private constructor() {
         this.redirect = true;
         this.useStackLogging = false;
         this.track("ctor: starting");
@@ -65,7 +67,7 @@ export default class MsalHandler {
         this.msalObj = a;
     }
 
-    async login(redirect?: boolean, state?: string, scopes?: string[]) {
+    public async login(redirect?: boolean, state?: string, scopes?: string[]) {
         this.track("entering login; scopes: " + scopes + ", state: " + state + ", redirect: " + redirect);
         if (state) {
             this.track("Setting state to: " + state);
@@ -86,7 +88,7 @@ export default class MsalHandler {
         }
     }
 
-    async acquireAccessToken(state?: string, redirect?: boolean, scopes?: string[]): Promise<String | null> {
+    public async acquireAccessToken(state?: string, redirect?: boolean, scopes?: string[]): Promise<String | null> {
         if (scopes) {
             this.requestConfiguration.scopes = scopes;
         }
@@ -110,7 +112,7 @@ export default class MsalHandler {
         return null;
     }
 
-    getUserData(): UserInfo {
+    public getUserData(): UserInfo {
         var account = this.msalObj.getAccount();
         var u = new UserInfo();
         if (account) {
@@ -120,7 +122,7 @@ export default class MsalHandler {
         return u;
     }
 
-    processLogin(response: AuthResponse | undefined) {
+    public processLogin(response: AuthResponse | undefined) {
         this.track("processLogin");
         if (!response) return;
         this.track("id_token received: " + response.idToken);

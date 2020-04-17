@@ -12,7 +12,7 @@ export default class Headers extends React.Component {
     }
 
     componentDidMount() {
-        API.get(`headers`)
+        API.get(`headers`) // axios will handle adding the authorization header
             .then(res => {
                 const headers = res.data;
                 this.setState({ headers });
