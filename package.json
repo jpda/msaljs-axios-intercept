@@ -2,7 +2,7 @@
   "name": "msaljs-axios",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/msal-axios-intercept/",
+  "homepage": "https://jpda.dev/msal-axios-intercept/",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
