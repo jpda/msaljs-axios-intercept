@@ -3,7 +3,7 @@ const MsalConfig = {
         auth: {
             clientId: "31c0ca04-16fb-49b6-83a2-e8c8487ea4fd",
             authority: "https://login.microsoftonline.com/98a34a88-7940-40e8-af71-913452037f31",
-            redirectUri: "https://jpda.dev/msaljs-axios-intercept/auth",
+            redirectUri: "https://msaljs-axios.jpda.app/auth",
             navigateToLoginRequestUrl: false
         },
         cache: {

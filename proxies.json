@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+        "api": {
+            "matchCondition": {
+                "route": "/api/{*url}"
+            },
+            "backendUri": "https://localhost/api/{url}"
+        },
+        "PathProxy":{
+            "matchCondition": {
+                "methods": [
+                    "GET"
+                ],
+                "route": "/auth"
+            },
+            "debug": false,
+            "backendUri": "https://msalaxiosintercept.z13.web.core.windows.net/"
+        },
+        "Headers":{
+            "matchCondition": {
+                "methods": [
+                    "GET"
+                ],
+                "route": "/headers"
+            },
+            "debug": false,
+            "backendUri": "https://msalaxiosintercept.z13.web.core.windows.net/"
+        },
+        "SpaAssetsProxy":{
+            "matchCondition": {
+                "methods": [
+                    "GET"
+                ],
+                "route": "/{*restOfPath}"
+            },
+            "debug": false,
+            "backendUri": "https://msalaxiosintercept.z13.web.core.windows.net/{restOfPath}"
+        }
+    }
+}

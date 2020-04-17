@@ -2,7 +2,6 @@
   "name": "msaljs-axios",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jpda.dev/msaljs-axios-intercept/",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -22,7 +21,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf ./docs && mkdir ./docs && cp -rf ./build/* ./docs/", 
+    "build": "react-scripts build",
+    "deploy": "az storage blob delete-batch -s \"\\$web\" --account-name msaljsaxiosintercept --pattern \"*\" --auth-mode login && az storage blob upload-batch -s \"build/\" -d \"\\$web\" --account-name msaljsaxiosintercept --output none --auth-mode login",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
